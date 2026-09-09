@@ -4,12 +4,10 @@
 This project analyzes Google Play Store application data to understand app performance, user engagement, popularity, ratings, installations, pricing, and market trends.
 
 The analysis follows an end-to-end data analytics workflow:
-
-**Python Data Cleaning & EDA → Feature Engineering → Power BI Dashboard**
+**Python Data Cleaning & EDA → Feature Engineering → Predictive Analysis → Power BI Dashboard**
 
 ## 🎯 Problem Statement
 The Google Play Store contains a large number of applications across different categories, genres, pricing models, and target audiences.
-
 The objective of this project is to analyze application data and identify:
 
 - Which app categories contain the highest number of applications
@@ -166,7 +164,71 @@ The analysis also focused on:
 - Categories with the highest number of applications
 - Categories with the highest total installations
 
-## 4. 📊 Power BI Dashboard & Visualization
+## 4. 🤖 Predictive Analysis – Rating Prediction
+Machine learning was used to estimate application ratings for apps where the original rating was missing.
+
+### Problem
+The dataset contained applications with missing ratings. A regression model was developed to estimate ratings using available application characteristics.
+
+### Features Used
+The model used:
+
+- Category
+- Reviews
+- Size
+- Installs
+- Type
+- Price
+- Content Rating
+- Genres
+- Day
+- Month
+- Year
+
+### Data Preparation
+- Selected applications with available ratings for model training
+- Handled missing `Size` values using the median
+- Split the data into 80% training and 20% testing sets
+- Applied `StandardScaler` to numerical features
+- Applied `OneHotEncoder` to categorical features
+
+### Models Evaluated
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Linear Regression | 0.3754 | 0.5389 | 0.0570 |
+| Decision Tree | 0.3720 | 0.5337 | 0.0749 |
+| Random Forest | 0.3460 | 0.5112 | 0.1513 |
+| Tuned Random Forest | 0.3497 | 0.5099 | **0.1555** |
+
+The **Tuned Random Forest** provided the best R² score of **0.1555** and was selected for generating predictions.
+
+### Model Evaluation
+The final model achieved:
+
+- **MAE:** 0.3497
+- **RMSE:** 0.5099
+- **R²:** 0.1555
+
+The relatively low R² indicates that the model explains only a limited portion of the variation in application ratings. Therefore, the predictions are treated as **estimates for analytical use rather than exact ratings**.
+
+### Missing Rating Prediction
+The trained model was used to estimate ratings for **1,463 applications** where the original rating was missing.
+
+The predicted ratings ranged approximately from **2.96 to 4.88**, with an average predicted rating of approximately **4.27**.
+
+The original `Rating` values were kept unchanged, while predictions were stored separately in the `Predicted Rating` column.
+
+### Business Value
+The predicted ratings provide an additional analytical signal that can be used to:
+
+- Identify applications with potentially high or low ratings
+- Compare applications when actual ratings are unavailable
+- Prioritize applications for further investigation
+- Support exploratory and product-level analysis
+
+Because the model performance is limited, predicted ratings should not be treated as a replacement for actual user ratings.
+
+## 5. 📊 Power BI Dashboard & Visualization
 The final analysis was transformed into an interactive Microsoft Power BI dashboard to present the major findings in a clear and business-friendly format.
 
 ### KPI Metrics
@@ -258,12 +320,16 @@ Combine application ratings, reviews, installations, category, pricing, and othe
 - NumPy
 - Matplotlib
 - Seaborn
+- Scikit-learn
 - Jupyter Notebook
 - Microsoft Power BI
 - Power Query
 - Data Cleaning
 - Exploratory Data Analysis
 - Feature Engineering
+- Regression
+- Random Forest
+- Model Evaluation
 - Data Visualization
 
 ## 📁 Project Files
@@ -272,6 +338,7 @@ Combine application ratings, reviews, installations, category, pricing, and othe
 - `eda.ipynb` – Python data cleaning, EDA, and feature engineering
 - `Google_Play_Store_Dashboard.pbix` – Power BI dashboard
 - `Google_Play_Store_Dashboard_Preview.png` – Dashboard preview
+- `google_play_final_with_predictions.csv` – Dataset containing predicted ratings for applications with missing ratings
 - `README.md` – Project documentation
 
 ## 📌 Conclusion
@@ -279,12 +346,14 @@ The Google Play Store analysis provides insights into application popularity, us
 
 The analysis shows that **Family** has the largest number of applications, while **Game** has the highest total number of installations in the analyzed dataset.
 
-Python was used for data cleaning, exploratory data analysis, and feature engineering, while Power BI was used to create an interactive dashboard for business-focused visualization.
+Python was used for data cleaning, exploratory data analysis, feature engineering, and predictive modeling, while Power BI was used to create an interactive dashboard for business-focused visualization.
 
-Overall, the project demonstrates an end-to-end data analytics workflow for transforming raw application data into meaningful insights and business recommendations.
+A Random Forest regression model was also developed to estimate missing application ratings. The final tuned model achieved an **R² of 0.1555** and generated estimated ratings for **1,463 applications** with missing ratings.
+
+Overall, the project demonstrates an end-to-end data analytics and machine learning workflow for transforming raw application data into meaningful insights, predictive estimates, and business recommendations.
 
 ## 👤 Project Type
-**Data Analytics Project**
+**Data Analytics Project & Machine Learning Project**
 
 ### End-to-End Workflow
-`Python → Feature Engineering → Power BI`
+`Python → Data Cleaning → EDA → Feature Engineering → Machine Learning → Power BI`
